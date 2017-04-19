@@ -5,7 +5,7 @@ if ([ "$1" != "--resource-group" ] && [ "$1" != "-g" ]) || ([ "$3" != "--name" ]
 Usage: $0 --resource-group group --name name ...
 All arguments are forwarded to az vmss create, so see that for help.
 However, you must have --resource-group group --name name at the beginning.
-That way they can be passed to $(dirname "$0")
+That way they can be passed to $(dirname "$0")/vmss_setup.sh
 EOF
 fi
 az vmss create "$@"
