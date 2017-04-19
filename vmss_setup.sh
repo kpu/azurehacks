@@ -15,4 +15,4 @@ This script:
 EOF
   exit 1
 fi
-az vmss list-instance-connection-info $@ --output tsv |parallel --gnu "$(dirname "$0")"/internal/vmss_setup.sh {} $@
+az vmss list-instance-connection-info $@ --output tsv |parallel --gnu --no-notice "$(dirname "$0")"/internal/vmss_setup.sh {} $@
