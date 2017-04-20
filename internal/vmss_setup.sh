@@ -11,6 +11,6 @@ if ! ssh-keyscan -p $port $host >>~/.ssh/known_hosts 2>/dev/null; then
   exit 1
 fi
 #Copy azure credentials over and make delete/deallocate commands
-(echo $@ --instance-ids '$(hostname |tail -c 7)'; cd ~; tar c .azure) |ssh -p $port $host 'read a; echo -e '\''#!/bin/bash\n'\''az vmss deallocate $a >deallocate && echo -e '\''#!/bin/bash\n'\''az vmss delete-instances $a >delete && chmod +x deallocate delete && tar x && sudo mv deallocate delete /bin'
+(echo $@ --instance-ids '$(hostname | tail -c 7 | bc)'; cd ~; tar c .azure) |ssh -p $port $host 'read a; echo -e '\''#!/bin/bash\n'\''az vmss deallocate $a >deallocate && echo -e '\''#!/bin/bash\n'\''az vmss delete-instances $a >delete && chmod +x deallocate delete && tar x && sudo mv deallocate delete /bin'
 #Print hosts in GNU parallel format
 echo 1/ssh -p $port $host
