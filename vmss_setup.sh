@@ -15,4 +15,8 @@ This script:
 EOF
   exit 1
 fi
-az vmss list-instance-connection-info $@ --output tsv |parallel --gnu --no-notice "$(dirname "$0")"/internal/vmss_setup.sh {} $@
+ip=$(az vmss list-instance-connection-info $@ --output tsv | head -n 1 | cut -d : -f 1)
+echo IP address $ip 1>&2
+az network lb show $1 $2 $3 ${4}LB --o json | \
+  "$(dirname "$0")"/internal/parse_load_balance.py $ip | \
+  parallel --gnu --no-notice --colsep ' ' "$(dirname "$0")"/internal/vmss_setup.sh {} $@
