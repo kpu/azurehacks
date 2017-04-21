@@ -7,7 +7,7 @@ host=$3
 shift 3
 #Accept host keys :-(
 if ! ssh-keyscan -p $port $host >>~/.ssh/known_hosts 2>/dev/null; then
-  echo $host:$port does not seem to be up, might be hallucinated 1>&2
+  echo $host:$port does not seem to be up, might be overprovisioned 1>&2
   exit 1
 fi
 #Copy azure credentials over and make delete/deallocate commands

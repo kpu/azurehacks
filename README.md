@@ -32,3 +32,9 @@ For even more convenience, use `./vmss_create` as a drop-in replacement for `az 
 - [GNU parallel](https://www.gnu.org/software/parallel/) installed on the client (though we could make a slower version without it).
 - [az command line](https://github.com/Azure/azure-cli/) on the client and VM image.
 - SSH keys working.
+
+### Caution
+
+Command line credentials expire if they're not used for some time, which may have passed by the time your job ends.  Since the credentials are copied, any activity will keep them alive.  I guess we could add a cron job.  
+
+If you increase the size of your scale set, remember to provision to the new nodes by rerunning `./vmss_setup.sh`.  
