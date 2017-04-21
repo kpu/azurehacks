@@ -2,7 +2,7 @@
 
 ## Virtual machine suicide
 
-A machine should be able to [shut itself off and stop charging money](https://feedback.azure.com/forums/216843-virtual-machines/suggestions/6750431-allow-shutdown-from-vm-to-deallocated-state).  This is useful for the end of long-running, variable-length computation.  This repo is a kludge to get around that limitation.
+A machine should be able to [shut itself off and stop charging money](https://feedback.azure.com/forums/216843-virtual-machines/suggestions/6750431-allow-shutdown-from-vm-to-deallocated-state).  This is useful for the end of long-running, variable-length computation.  This script installs `deallocate` and `delete` commands on your VMs so they can suicide without continuing to cost money in the mostly-useless stopped state.  
 
 We assume you are using [VM scalesets](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-overview).  To install `deallocate` and `delete` commands on your VMs, run
 ```bash
