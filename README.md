@@ -11,8 +11,8 @@ We assume you are using [VM scalesets](https://docs.microsoft.com/en-us/azure/vi
 It will:
 1. Insecurely scrape SSH host keys and add them to your `~/.ssh/known_hosts`.  [There does not appear to be a secure way to do this.](https://feedback.azure.com/forums/34192--general-feedback/suggestions/8948203-display-ssh-host-key-fingerprints-for-linux-vm-s)
 2. Copy your `~/.azure` to the machines so they have command line access.
-3. Installs delete and deallocate commands so you can run them inside the VM.
-4. Prints SSH commands to connect with.
+3. Install delete and deallocate commands so you can run them inside the VM.
+4. Print SSH commands to connect with.
 
 For even more convenience, use `./vmss_create` as a drop-in replacement for `az vmss create`.  
 
