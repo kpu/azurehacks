@@ -14,6 +14,17 @@ It will:
 3. Install delete and deallocate commands so you can run them inside the VM.
 4. Print SSH commands to connect with.
 
+Then on your VM, you can simply do
+```bash
+#Inside VM
+delete
+```
+or
+```bash
+#Inside VM
+deallocate
+```
+
 For even more convenience, use `./vmss_create` as a drop-in replacement for `az vmss create`.  
 
 ### Requirements
