@@ -10,7 +10,12 @@ def query(command):
 lb = query(["az", "network", "lb", "list", "-o", "json"])
 vmss = query(["az", "vmss", "list", "-o", "json"])
 
-in_use_lbs = ['/'.join(m["virtualMachineProfile"]["networkProfile"]["networkInterfaceConfigurations"][0]["ipConfigurations"][0]["loadBalancerBackendAddressPools"][0]["id"].split('/')[0:9]) for m in vmss]
+in_use_lbs = []
+for m in vmss:
+  balancer = m["virtualMachineProfile"]["networkProfile"]["networkInterfaceConfigurations"][0]["ipConfigurations"][0]["loadBalancerBackendAddressPools"]
+  if balancer:
+    in_use_lbs.append('/'.join(balancer[0]["id"].split('/')[0:9]))
+ 
 allocated_lbs = ['/'.join(l["frontendIpConfigurations"][0]["id"].split('/')[0:9]) for l in lb]
 
 unused_lbs = set(allocated_lbs) - set(in_use_lbs)
@@ -39,3 +44,5 @@ for i in set(allocated_ips) - set(in_use_ips):
   split = i.split('/')
   print "az network public-ip delete -g " + split[4] + " -n " + split[8]
 
+nsg_all = query(["az", "network", "nsg", "list", "-o", "json"])
+#TODO: delete network security groups
