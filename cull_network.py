@@ -44,5 +44,7 @@ for i in set(allocated_ips) - set(in_use_ips):
   split = i.split('/')
   print "az network public-ip delete -g " + split[4] + " -n " + split[8]
 
-nsg_all = query(["az", "network", "nsg", "list", "-o", "json"])
-#TODO: delete network security groups
+nsg_all = [n['id'] for n in query(["az", "network", "nsg", "list", "-o", "json"])]
+for i in set(nsg_all) - set([n['networkSecurityGroup']['id'] for n in nics]):
+  split = i.split('/')
+  print "az network nsg delete -g " + split[4] + " -n " + split[8]
