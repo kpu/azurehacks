@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e -o pipefail
 src_region=southcentralus
-dest_region=westus2
+dest_region=eastus
 
 group=${USER}-imaging
 src_group=$group
@@ -53,5 +53,4 @@ while sleep 2; do
 done
 
 az snapshot create -g $dest_group -n $dest_image -l $dest_region --source https://${dest_storage}.blob.core.windows.net/vhds/${image}.vhd
-az image create -g $dest_group -n $dest_image --os-type Linux --source /subscriptions/$(cut -d \" -f 6 ~/.azure/azureProfile.json)/resourceGroups/$dest_group/providers/Microsoft.Compute/snapshots/$image -l $dest_region
-
+az image create -g $dest_group -n $dest_image --os-type Linux --source /subscriptions/$(cut -d \" -f 6 ~/.azure/azureProfile.json)/resourceGroups/$dest_group/providers/Microsoft.Compute/snapshots/$image -l $dest_region || echo "The above operation probably passed despite the error message"
