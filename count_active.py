@@ -14,8 +14,9 @@ for ss in vmss:
   if sku not in count:
     count[sku] = 0
   for m in query(["az", "vmss", "get-instance-view", "-g", ss['resourceGroup'], "-n", ss['name'], "-o", "json", "--instance-id", "*"]):
-    if m['instanceView']['statuses'][1]['code'] == u'PowerState/running':
-      count[sku] += 1
+    for s in m['statuses']:
+      if s['code'] == u'PowerState/running':
+        count[sku] += 1
 
 for single in query(["az", "vm", "list", "-o", "json"]):
   for status in query(["az", "vm", "get-instance-view", "-g", single['resourceGroup'], "-n", single['name']])['instanceView']['statuses']:
