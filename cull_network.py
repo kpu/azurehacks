@@ -42,7 +42,9 @@ for n in set(allocated_nics) - set(in_use_nics):
 ip_used_by_nic = [n["ipConfigurations"][0]["publicIpAddress"]["id"] for n in nics]
 in_use_ips = ip_used_by_lb + ip_used_by_nic
 
-allocated_ips = [i["id"] for i in query(["az", "network", "public-ip", "list", "-o", "json"])]
+ips = query(["az", "network", "public-ip", "list", "-o", "json"])
+
+allocated_ips = [i["id"] for i in ips]
 for i in set(allocated_ips) - set(in_use_ips):
   split = i.split('/')
   print "az network public-ip delete -g " + split[4] + " -n " + split[8]
@@ -56,3 +58,16 @@ for n in nics:
 for i in set(nsg_all) - nsg_in_use:
   split = i.split('/')
   print "az network nsg delete -g " + split[4] + " -n " + split[8]
+
+vnet_all = [vnet['id'] for vnet in query(["az", "network", "vnet", "list", "-o", "json"])]
+
+#VNETS direct from NICs
+ipconfigs = [ipconfig for n in nics for ipconfig in n['ipConfigurations']]
+#VNETS for entire scale sets
+ipconfigs += [ipconfig for ss in vmss for nc in ss['virtualMachineProfile']['networkProfile']['networkInterfaceConfigurations'] for ipconfig in nc['ipConfigurations']]
+vnet_used = ['/'.join(ipconfig['subnet']['id'].split('/')[0:9]) for ipconfig in ipconfigs]
+
+for vnet in set(vnet_all) - set(vnet_used):
+  split = vnet.split('/')
+  print("az network vnet delete -g " + split[4] + " -n " + split[8])
+
