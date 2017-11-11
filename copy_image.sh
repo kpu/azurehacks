@@ -17,6 +17,11 @@ dest_storage=${USER}images$dest_region #Must be globally unique
 #Get the disk name from the image name
 disk=$(az image show -g $src_group -n $src_image --query storageProfile.osDisk.managedDisk.id -o tsv)
 echo "Source image disk $disk"
+if [ ${#disk} == 0 ]; then
+  echo Failed to get the managed disk.  Does $src_image image in $src_group exist?  1>&2
+  echo TODO: implement images created from snapshots, including copies made by this script. 1>&2
+  return 1
+fi
 #Get a shared access signature
 sas="$(az disk grant-access -g $src_group --duration-in-seconds 7200 -n $(cut -d / -f 9 <<<$disk) --query accessSas -o tsv)"
 
