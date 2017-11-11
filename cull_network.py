@@ -24,8 +24,11 @@ for l in unused_lbs:
   print "az network lb delete -g " +  split[4] +  " -n " + split[8]
 
 #TODO: exclude the lbs that are to be deleted
-ip_used_by_lb = [l["frontendIpConfigurations"][0]["publicIpAddress"]["id"] for l in lb]
-
+ip_used_by_lb = []
+for l in lb:
+  public_ip = l["frontendIpConfigurations"][0]["publicIpAddress"]
+  if public_ip:
+    ip_used_by_lb.append(public_ip["id"])
 
 vm = query(["az", "vm", "list", "-o", "json"])
 in_use_nics = [v["networkProfile"]["networkInterfaces"][0]["id"] for v in vm]
@@ -45,6 +48,11 @@ for i in set(allocated_ips) - set(in_use_ips):
   print "az network public-ip delete -g " + split[4] + " -n " + split[8]
 
 nsg_all = [n['id'] for n in query(["az", "network", "nsg", "list", "-o", "json"])]
-for i in set(nsg_all) - set([n['networkSecurityGroup']['id'] for n in nics]):
+nsg_in_use = set()
+for n in nics:
+  if n['networkSecurityGroup']:
+    nsg_in_use.add(n['networkSecurityGroup']['id'])
+
+for i in set(nsg_all) - nsg_in_use:
   split = i.split('/')
   print "az network nsg delete -g " + split[4] + " -n " + split[8]
